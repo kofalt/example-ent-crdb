@@ -1,0 +1,19 @@
+issues:
+  exclude-rules:
+
+    # Don't care about multiple main funcs (1)
+    - linters:
+      - typecheck
+      text: "`main` redeclared in this block"
+
+    # Don't care about multiple main funcs (2)
+    - linters:
+      - typecheck
+      text: "other declaration of main"
+
+    # Docs say to use it for now
+    # Can be removed once atlas is mandatory in ent
+    - linters:
+      - staticcheck
+      text: "schema.WithAtlas is deprecated"
+
