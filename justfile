@@ -15,8 +15,8 @@ ModuleName := "github.com/kofalt/example-ent-crdb"
 #
 
 # Run server
-run: gen
-	go run -v .
+run *args='': gen
+	go run -v . "$@"
 
 # Pre-commit sanity checks
 pre: gen fmt lint
@@ -59,6 +59,21 @@ lint: get-linter
 
 @get-pkgsite:
 	hash pkgsite || (echo "Installing pkgsite..."; go install -v golang.org/x/pkgsite/cmd/pkgsite@latest)
+
+#
+# Container
+#
+
+# Library downloads & compilation
+precache:
+	go mod download
+
+	go list -m -f "{{{{if not (or .Indirect .Main)}}{{{{.Path}}{{{{end}}" all | xargs -t -- go build -v
+
+	go build -v github.com/jellydator/validation github.com/rs/zerolog/log
+
+	just ent --help > /dev/null
+
 
 #
 # CI
